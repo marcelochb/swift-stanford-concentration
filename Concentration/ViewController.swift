@@ -29,6 +29,13 @@ class ViewController: UIViewController
         }
     }
     
+    @IBAction func startGame(_ sender: UIButton) {
+        game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+        flipCount = 0
+        emojiChoices = ["🐒","🦁","🐶","🦅","🐴","🦖","🦈","🐊","🦒","🐅"]
+        updateViewFromModel()
+        flipCountLabel.text = "Flips: 0"
+    }
     func updateViewFromModel() {
         for index in cardButtons.indices {
             let button = cardButtons[index]
@@ -45,10 +52,14 @@ class ViewController: UIViewController
         }
     }
     
-    var emojiChoices = ["🐒","🦁","🐶","🦅","🐴","🦖","🦈","🐊","🦒"]
-    
+    var emojiChoices = ["🐒","🦁","🐶","🦅","🐴","🦖","🦈","🐊","🦒","🐅"]
+    var emoji = [Int:String]()
     func emoji(for card: Card) -> String {
-        return "?"
+        if emoji[card.identifier] == nil , emojiChoices.count > 0 {
+            let randomIndex = Int(arc4random_uniform(UInt32(emojiChoices.count)))
+            emoji[card.identifier] = emojiChoices.remove(at: randomIndex)
+        }
+        return emoji[card.identifier] ?? "?"
     }
 }
 
